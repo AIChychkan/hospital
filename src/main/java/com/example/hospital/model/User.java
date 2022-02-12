@@ -1,3 +1,4 @@
+/*
 package com.example.hospital.model;
 
 import com.example.hospital.services.UserService;
@@ -94,3 +95,4 @@ public class User implements UserDetails {
     }
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.example.hospital.services;
 
 import com.example.hospital.repositories.UserRepository;
@@ -20,3 +21,4 @@ public class UserService implements UserDetailsService {
                         new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
     }
 }
+*/
