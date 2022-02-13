@@ -1,20 +1,23 @@
 package com.example.hospital.model;
 
 import lombok.*;
-
 import javax.persistence.*;
-
 import static javax.persistence.GenerationType.SEQUENCE;
+
+/**
+ * Here are all data and methods of Patient.
+ */
 
 @Setter
 @Getter
 @Entity(name = "Patient")
 @Table(name = "patient",
-        uniqueConstraints={
-        @UniqueConstraint(
-                name = "patient_email_unique",
-                columnNames = "email")})
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "patient_email_unique",
+                        columnNames = "email")})
 @NoArgsConstructor
+@AllArgsConstructor
 public class Patient {
     @Id
     @SequenceGenerator(
@@ -50,5 +53,16 @@ public class Patient {
         this.lastName = lastName;
         this.email = email;
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                '}';
     }
 }
