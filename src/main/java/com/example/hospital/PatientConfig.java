@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+/**
+ * commandLineRunner returns a List of Patient(s).
+ */
+
 @Configuration
 public class PatientConfig {
     @Bean
@@ -18,8 +22,6 @@ public class PatientConfig {
                     "Simpson",
                     "m.simpson@gmail.com",
                     30);
-
-            patientRepository.save(march);
 
             Patient bart = new Patient(
                     "Bart",

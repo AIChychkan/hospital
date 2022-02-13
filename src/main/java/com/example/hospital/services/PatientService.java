@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This is a service layer.
@@ -27,7 +28,15 @@ public class PatientService {
         return patientRepository.findAll();
     }
 
+    /**
+     * Business logic. addNewPatient adds new patient if its email doesn't exist in DB.
+     */
     public void addNewPatient(Patient patient) {
-        System.out.println(patient);
+        Optional<Patient> patientOptional = patientRepository.findPatientByEmail(patient.getEmail());
+
+        if(patientOptional.isPresent())
+            throw new IllegalStateException("email taken");
+
+        patientRepository.save(patient);
     }
 }
