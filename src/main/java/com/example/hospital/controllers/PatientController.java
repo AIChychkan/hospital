@@ -17,21 +17,24 @@ import java.util.List;
 public class PatientController {
 
     private final PatientService patientService;
+    private final String hasAnyRole = "hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR', 'ROLE_NURSE')";
+    private final String hasAuthority = "hasAuthority('patient:register')";
+
 
     @Autowired
     public PatientController(PatientService patientService) {
         this.patientService = patientService;
     }
-
     //Get List of Patients
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_DOCTOR')")
+    @PreAuthorize(hasAnyRole)
     public List<Patient> getPatients() {
         return patientService.getPatients();
     }
 
     //Get Patient by ID
     @GetMapping(path = "{patientId}")
+    @PreAuthorize(hasAnyRole)
     public Patient getPatient(@PathVariable("patientId") Long patientId) {
         return patientService.getPatients()
                 .stream()
@@ -41,17 +44,20 @@ public class PatientController {
     }
 
     @PostMapping// Takes email: is exists - throw an exception, if not - we add
+    @PreAuthorize(hasAuthority)
     public void addNewPatient(@RequestBody Patient patient) { //Take requestBody and MAP it to Patient.
         patientService.addNewPatient(patient);
     }
 
     @DeleteMapping(path = "{patientId}")
+    @PreAuthorize(hasAuthority)
     public void deletePatient(@PathVariable("patientId") Long patientId) {
         patientService.deletePatient(patientId);
     }
 
     //Update Patient Information
     @PutMapping("{patientId}")
+    @PreAuthorize(hasAuthority)
     public void updatePatient(@PathVariable("patientId") Long patientId,
                               @RequestParam(required = false) String firstName, //"required = false" means not required for pathing as a parameter
                               @RequestParam(required = false) String lastName,

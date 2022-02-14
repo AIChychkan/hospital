@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,6 +19,7 @@ import static com.example.hospital.security.AppUserRole.*;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
@@ -31,15 +33,15 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+//                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("index", "css/*", "js/*").permitAll() //whitelisting URLs from authentication
                 .antMatchers("/patient/**").hasRole(ADMIN.name())//provide access to URL only for specific users
-                .antMatchers(HttpMethod.DELETE, "/management/**").hasAuthority(PATIENT_REGISTER.getPermission())
+/*                .antMatchers(HttpMethod.DELETE, "/management/**").hasAuthority(PATIENT_REGISTER.getPermission())
                 .antMatchers(HttpMethod.POST, "/management/**").hasAuthority(PATIENT_REGISTER.getPermission())
                 .antMatchers(HttpMethod.PUT, "/management/**").hasAuthority(PATIENT_REGISTER.getPermission())
                 .antMatchers(HttpMethod.GET, "/management/**").hasAnyRole(
-                        ADMIN.name(), PATIENT.name(), DOCTOR.name(), NURSE.name())
+                        ADMIN.name(), PATIENT.name(), DOCTOR.name(), NURSE.name())*/
                 .anyRequest()
                 .authenticated()
                 .and()
