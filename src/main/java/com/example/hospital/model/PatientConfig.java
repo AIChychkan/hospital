@@ -1,6 +1,5 @@
-package com.example.hospital;
+package com.example.hospital.model;
 
-import com.example.hospital.model.Patient;
 import com.example.hospital.repositories.PatientRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
