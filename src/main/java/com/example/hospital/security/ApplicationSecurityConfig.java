@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.example.hospital.security.AppUserPermission.*;
 import static com.example.hospital.security.AppUserRole.*;
@@ -33,7 +34,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-//                .csrf().disable()
+//                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                .and()
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("index", "css/*", "js/*").permitAll() //whitelisting URLs from authentication
                 .antMatchers("/patient/**").hasRole(ADMIN.name())//provide access to URL only for specific users
@@ -45,7 +48,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+//                .httpBasic(); //basic authentication, which does not let us to logout.
+                .formLogin() //form-based authentication.
+                .loginPage("/login").permitAll();
     }
 
     @Override
