@@ -13,6 +13,9 @@ public class TemplateController {
         return "login"; //has to be the same as target -> templates -> login.html, but without .html
     }
 
-
+    @GetMapping("doctors")
+    public String getDoctors(){
+        return "doctors";
+    }
 
 }

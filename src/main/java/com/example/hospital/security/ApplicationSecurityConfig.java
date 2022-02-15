@@ -14,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.example.hospital.security.AppUserPermission.*;
 import static com.example.hospital.security.AppUserRole.*;
@@ -50,7 +53,23 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 //                .httpBasic(); //basic authentication, which does not let us to logout.
                 .formLogin() //form-based authentication.
-                .loginPage("/login").permitAll();
+                    .loginPage("/login").permitAll()
+                    .defaultSuccessUrl("/doctors", true)
+                    .passwordParameter("password") // "name" in .html
+                    .usernameParameter("username") // "name" in .html
+                .and()
+                .rememberMe()
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30)) //remember-me 30 days.
+                    .key("somekey")
+                .rememberMeParameter("remember-me") // "name" in .html
+                .and()
+                .logout()
+                    .logoutUrl("/logout")
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID", "remember-me") //clearing cookies: json-session-id and remember-me
+                    .logoutSuccessUrl("/login");
     }
 
     @Override
