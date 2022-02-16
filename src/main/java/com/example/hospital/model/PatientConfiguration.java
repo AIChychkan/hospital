@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 @Configuration
-public class PatientConfig {
+public class PatientConfiguration {
     @Bean
     CommandLineRunner commandLineRunner(PatientRepository patientRepository) {
         return args -> {

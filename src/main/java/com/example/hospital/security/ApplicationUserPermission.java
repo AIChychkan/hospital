@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum AppUserPermission {
+public enum ApplicationUserPermission {
 
     //Registration
     PATIENT_REGISTER("patient:register"),
