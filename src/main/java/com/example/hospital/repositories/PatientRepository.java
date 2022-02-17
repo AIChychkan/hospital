@@ -9,16 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 /**
- * Interface responsible for connection to DB.
+ * Interface which extends JpaRepository - responsible for connection to DB.
  */
 
 @Repository
 @Transactional(readOnly = true)
-public interface PatientRepository extends JpaRepository<Patient, Long> { //getting all the necessary methods from JpaRepository.
-
+public interface PatientRepository extends JpaRepository<Patient, Long> { //Patient - class which we want to manage,
+                                                                            // Long - type of Primary Key
 /*    (Patient is Patient.java Entity)
     This is JBQL query -> SQL: SELECT * FROM patient WHERE email = ?*/
-    @Query("SELECT s FROM Patient s WHERE s.email = ?1")
-    Optional<Patient> findPatientByEmail(String email);
 
+//    @Query("SELECT s FROM Patient s WHERE s.email = ?1")
+    Optional<Patient> findPatientByEmail(String email); // custom made server.
 }

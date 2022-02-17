@@ -46,7 +46,7 @@ public class PatientController {
     @PostMapping// Takes email: is exists - throw an exception, if not - we add
     @PreAuthorize(hasAuthority)
     public void addNewPatient(@RequestBody Patient patient) { //Take requestBody and MAP it to Patient.
-        patientService.addNewPatient(patient);
+        patientService.createPatient(patient);
     }
 
     @DeleteMapping(path = "{patientId}")

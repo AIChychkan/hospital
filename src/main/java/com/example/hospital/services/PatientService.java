@@ -2,8 +2,11 @@ package com.example.hospital.services;
 
 import com.example.hospital.model.Patient;
 import com.example.hospital.repositories.PatientRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -13,13 +16,16 @@ import java.util.Optional;
  * This is a service layer.
  */
 
-//@Service
+@Service
 @Component
+@Transactional
+@Slf4j //I'll be able to print smth to console to see what's happening.
+//@RequiredArgsConstructor
 public class PatientService {
-
     private final PatientRepository patientRepository;
 
     @Autowired
+    //Constructor
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
@@ -28,10 +34,7 @@ public class PatientService {
         return patientRepository.findAll();
     }
 
-    /**
-     * Business logic. addNewPatient adds new patient if its email doesn't exist in DB.
-     */
-    public void addNewPatient(Patient patient) {
+    public void createPatient(Patient patient) {
         Optional<Patient> patientOptional = patientRepository.findPatientByEmail(patient.getEmail());
 
         if (patientOptional.isPresent())
@@ -64,6 +67,18 @@ public class PatientService {
         if (patientOptional.isPresent())
             throw new IllegalStateException("student with email: " + email + " already exist");
         patient.setEmail(email);
-
     }
+
+    // I already have such a method in PatientRepository from JPARepository.
+    public Patient getPatientByEmail(){
+
+        return null;
+    }
+
+    // I don't know if this method will be useful to implement.
+    public Patient getPatientByID(){
+
+        return null;
+    }
+
 }
