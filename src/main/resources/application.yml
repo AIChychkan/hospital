@@ -14,6 +14,9 @@
 #server.error.include-message=always
 
 #.yml is the same as .properties just without repeating myself
+
+jwt:
+  secureString: '8hf348fhU(*YG#dh8h99bT&3g82fb834fb8h#&*@RG@V#&^*G#@b8fv23vfyufrbv3748ob^@V^&@ifgv2f7'
 server:
   port: 8080
 
