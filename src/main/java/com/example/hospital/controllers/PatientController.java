@@ -1,67 +1,81 @@
 package com.example.hospital.controllers;
 
-import com.example.hospital.model.Patient;
-import com.example.hospital.services.PatientService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
+import com.example.hospital.entities.Patient;
+import com.example.hospital.repos.PatientRepo;
+import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-/**
- * Controller interacts with user API.
- */
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(path = "patient")
+@AllArgsConstructor
 public class PatientController {
+/*  injected to PatientController by constructor*/
+    private PatientRepo repository;
 
-    private final PatientService patientService;
-    private final String hasAnyRole = "hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR', 'ROLE_NURSE')";
-    private final String hasAuthority = "hasAuthority('patient:register')";
+/*  http approach*/
+/*    @GetMapping("/patients")
+    List<Patient> getAll(){
+        return repository.findAll();
+    }*/
 
+/*  REST approach*/
+    @GetMapping("/patients")
+    CollectionModel<EntityModel<Patient>> getAll() {
 
-    @Autowired
-    public PatientController(PatientService patientService) {
-        this.patientService = patientService;
-    }
-    //Get List of Patients
-    @GetMapping
-    @PreAuthorize(hasAnyRole)
-    public List<Patient> getPatients() {
-        return patientService.getPatients();
-    }
+        List<EntityModel<Patient>> patients = repository.findAll().stream()
+                .map(patient -> EntityModel.of(patient,
+                        linkTo(methodOn(PatientController.class)
+                                .getPatientById(patient.getId()))
+                                .withSelfRel(),
+                        linkTo(methodOn(PatientController.class)
+                                .getAll()).withRel("patients")))
+                .collect(Collectors.toList());
 
-    //Get Patient by ID
-    @GetMapping(path = "{patientId}")
-    @PreAuthorize(hasAnyRole)
-    public Patient getPatient(@PathVariable("patientId") Long patientId) {
-        return patientService.getPatients()
-                .stream()
-                .filter(patient -> patientId.equals(patient.getId()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("student with ID: " + patientId + " does not exist"));
-    }
-
-    @PostMapping// Takes email: is exists - throw an exception, if not - we add
-    @PreAuthorize(hasAuthority)
-    public void addNewPatient(@RequestBody Patient patient) { //Take requestBody and MAP it to Patient.
-        patientService.createPatient(patient);
+        return CollectionModel.of(patients, linkTo(methodOn(PatientController.class)
+                .getAll())
+                .withSelfRel());
     }
 
-    @DeleteMapping(path = "{patientId}")
-    @PreAuthorize(hasAuthority)
-    public void deletePatient(@PathVariable("patientId") Long patientId) {
-        patientService.deletePatient(patientId);
+/*  http approach*/
+/*    @GetMapping("/patients/{id}")
+    EntityModel<Patient> getPatientById(@PathVariable Long id) {
+        return repository.findById(id)
+                .orElseThrow(NullPointerException::new);
+    }*/
+
+/*  The return type of the method has changed from
+    Employee to EntityModel<Employee>. EntityModel<T>
+    is a generic container from Spring HATEOAS that
+    includes not only the data but a collection of
+    links.*/
+    @GetMapping("/patients/{id}")
+    EntityModel<Patient> getPatientById(@PathVariable Long id) {
+        Patient patient = repository.findById(id)
+                .orElseThrow(NullPointerException::new);
+/*   Adding links to make app RESTfull, using methods fromWebMvcLinkBuilder */
+        return EntityModel.of(patient,
+                linkTo(methodOn(PatientController.class)
+                        .getPatientById(id))
+                        .withSelfRel(),
+                linkTo(methodOn(PatientController.class)
+                        .getAll())
+                        .withRel("patients"));
     }
 
-    //Update Patient Information
-    @PutMapping("{patientId}")
-    @PreAuthorize(hasAuthority)
-    public void updatePatient(@PathVariable("patientId") Long patientId,
-                              @RequestParam(required = false) String firstName, //"required = false" means not required for pathing as a parameter
-                              @RequestParam(required = false) String lastName,
-                              @RequestParam(required = false) String email) {
-        patientService.updatePatient(patientId, firstName, lastName, email);
+    @PostMapping("/patients")
+    Patient newPatient(@RequestBody Patient newPatient){
+        return repository
+                .save(newPatient);
     }
+
+/*  + @PutMapping replacePatient
+    + @DeleteMapping deletePatient*/
 }
