@@ -1,0 +1,35 @@
+#spring.datasource.url=jdbc:postgresql://localhost:5432/hospital
+#spring.datasource.username=postgres
+#spring.datasource.password=root
+#
+#spring.jpa.hibernate.ddl-auto=create-drop
+#spring.jpa.show-sql=true
+#
+#spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+#spring.jpa.properties.hibernate.format_sql=true
+#spring.jpa.properties.hibernate.show_sql=true
+#
+#server.port=8080
+#
+#server.error.include-message=always
+
+#.yml is the same as .properties just without repeating myself
+
+jwt:
+  secureString: '8hf348fhU(*YG#dh8h99bT&3g82fb834fb8h#&*@RG@V#&^*G#@b8fv23vfyufrbv3748ob^@V^&@ifgv2f7'
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hospital
+    password: root
+    username: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
