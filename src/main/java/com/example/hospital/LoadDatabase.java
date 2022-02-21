@@ -14,17 +14,13 @@ import static com.example.hospital.enums.Speciality.*;
 import static com.example.hospital.enums.Status.COMPLETED;
 import static com.example.hospital.enums.Status.IN_PROGRESS;
 
-/**
- * Patient Bean creation
- */
 @Configuration
 public class LoadDatabase {
-
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
     @Bean
-    CommandLineRunner initDB(PatientRepo patientRepo, DoctorRepo doctorRepo){
-        return args ->  {
+    CommandLineRunner initDB(PatientRepo patientRepo, DoctorRepo doctorRepo) {
+        return args -> {
             patientRepo.save(new Patient("Bart", "bart@gmail.com", IN_PROGRESS.name()));
             patientRepo.save(new Patient("March", "march@gmail.com", IN_PROGRESS.name()));
             patientRepo.save(new Patient("Homer", "homer@gmail.com", COMPLETED.name()));
